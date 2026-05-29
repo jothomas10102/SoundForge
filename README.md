@@ -1,2 +1,2 @@
 # SoundForge
-FPGA Audio Processor
+FPGA Audio Processor Schematic Overview
