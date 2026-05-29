@@ -1,4 +1,4 @@
-#**Design Report**
+# **Design Report**
 
 The carrier board is powered through a 5V USB-C cable that powers all the circuitry on this device. 
 I chose this because I think USB-C feels better and is much easier to use compared to your typical 9V supply for pedals. 
