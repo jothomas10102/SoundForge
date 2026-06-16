@@ -19,17 +19,28 @@ Coming out of VBUS there is basic ESD protection and a decoupling capacitor whic
 
 Next I’ll go into the various power branches. There is a VBUS branch, 5VA, 3V3, 3V3A which are used to power various circuits. I used the same LDO regulator to step down 5V to 3V3 volts. One is used for powering the (3V3) DAC and the other is used for powering the Digital supply on the ADC (3V3A). 3V3A is also used to power many other analog components such as the various OP-Amps that are used as buffers and amplifiers. I have a 5VA source which is just a filtered VBUS; the ferrite bead and capacitor form a low pass filter shunting high frequency noise to ground from the rail before it hits the ADC analog input. I also have some status LEDS and testpoints for quick testing and debugging. 
 
+<div align="center">
 <img width="865" height="894" alt="image" src="https://github.com/user-attachments/assets/3c645485-c20b-4b4c-8667-6f02b220e3b5" />
+</div>
 <p align="center">(Figure 3) Power Rails </p>
 
-For the input signal for the guitar, I have a standard guitar input jack wired to a pulldown resistor, ESD protection and a low pass filter and a coupling capacitor. Low pass filter here blocks everything above 7.234315MHz. This is for blocking any RF from the guitar cable since it has inductance. The coupling capacitor blocks any DC noise and allows the AC signal to pass through labeled GUITAR_FILTERED. The 0.1uF capacitor is used as a coupling capacitor blocking DC noise from our signal. 
+Originally this design only had one input for just a guitar, but since there were two audio lines (left and right), I decided I wanted to add in another input for a keyboard since it is my main instrument of choice. So here you can see the two inputs, one for guitar and one for keyboard. 
+For each input signal, I have a standard  input jack wired to a pulldown resistor, ESD protection and a low pass filter and a coupling capacitor. Low pass filter here blocks everything above 7.234315MHz. This is for blocking any RF from the guitar cable since it has inductance. The coupling capacitor blocks any DC noise and allows the AC signal to pass through labeled GUITAR_FILTERED. The 0.1uF capacitor is used as a coupling capacitor blocking DC noise from our signal. 
 
-<img width="1128" height="292" alt="image" src="https://github.com/user-attachments/assets/aa4ead83-6249-42a6-9828-615eb51f6634" />
-<p align="center">(Figure 4) Analog Input </p>
+<div align="center">
+<img width="811" height="200" alt="image" src="https://github.com/user-attachments/assets/1ddac8d8-cb20-44ed-a9cf-9ea6b06b249f" />
+</div>
+<p align="center">(Figure 4.1) Input for Guitar </p>
 
-Next we want to actually process the signal so we send it through two OPAMPS. There’s a great video on youtube that explains how we can properly use a single supply OPAMP for audio signals. The issue is that with single supply OPAMPS, our negative side voltage is tied to GND and the positive voltage is tied to a source (in this case 3V3) so the output can only swing from 0 < VOUT < 3V3. The issue that arises is that audio signals will swing above and below 0V so the entire bottom half will get clipped. 
+<div align="center">
+<img width="797" height="192" alt="image" src="https://github.com/user-attachments/assets/13e0a268-b5c4-4daa-a9eb-0c6801c5eff4" />
+</div>
+<p align="center">(Figure 4.2) Input for Keyboard </p>
 
-<img width="1153" height="548" alt="image" src="https://github.com/user-attachments/assets/700263a2-3ae8-4f69-aa31-f3b36b00a5bc" />
+
+Now the next step is where the process changes a little. A standard guitar signal is not very strong and needs gain, so in order to boost the input signal I used an opamp and configured it to have a gain of 6. For the keyboard we dont need to boost the signal since it is already at line level so I just send it through an OPAMP with a gain of one. There’s a great video on youtube that explains how we can properly use a single supply OPAMP for audio signals. The issue is that with single supply OPAMPS, our negative side voltage is tied to GND and the positive voltage is tied to a source (in this case 3V3) so the output can only swing from 0 < VOUT < 3V3. The issue that arises is that audio signals will swing above and below 0V so the entire bottom half will get clipped. 
+
+![Uploading image.png…]()
 <p align="center">(Figure 4) Audio Wave </p>
 
 <img width="1004" height="473" alt="image" src="https://github.com/user-attachments/assets/ee7ad369-3d3a-4fff-a6a0-cac2a8c700c9" />
